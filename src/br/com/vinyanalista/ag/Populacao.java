@@ -32,6 +32,7 @@ public class Populacao<Individuo extends DefinicaoDoIndividuo<Individuo>> {
 	}
 	
 	private int numeroAleatorio(int menorValor, int maiorValor) {
+		// http://www.javapractices.com/topic/TopicAction.do?Id=62
 		long amplitude = (long) maiorValor - (long) menorValor + 1;
 		long fracao = (long)(amplitude * geradorDeNumerosAleatorios.nextDouble());
 		return (int)(fracao + menorValor);

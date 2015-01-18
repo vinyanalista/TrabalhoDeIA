@@ -2,7 +2,7 @@ package br.com.vinyanalista.ag;
 
 public interface DefinicaoDoIndividuo<Individuo> {
 	
-	public Individuo cruzar(DefinicaoDoIndividuo<Individuo> outroIndividuo);
+	public Individuo cruzar(Individuo outroIndividuo);
 	
 	public int fitness();
 	
