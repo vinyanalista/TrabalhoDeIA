@@ -5,8 +5,8 @@ import br.com.vinyanalista.ag.*;
 public class ProblemaDasRainhas extends AlgoritmoGenetico<Tabuleiro> {
 	
 	private static final int MAXIMO_DE_ITERACOES = 1000;
-	private static final int TAMANHO_DA_POPULACAO_INICIAL = 4;
-	private static final int TAMANHO_DO_TABULEIRO = 4;
+	private static final int TAMANHO_DA_POPULACAO_INICIAL = 500;
+	private static final int TAMANHO_DO_TABULEIRO = 8;
 
 	private final int maximoDeIteracoes;
 	private final Populacao<Tabuleiro> populacaoInicial;
