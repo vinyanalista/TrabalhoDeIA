@@ -30,4 +30,9 @@ public class Cidade {
 	public int getY() {
 		return y;
 	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder("(").append(x).append(", ").append(y).append(")").toString();
+	}
 }

@@ -27,8 +27,9 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 			Random geradorDeNumerosAleatorios = new Random();
 			for (int a = 0; a < quantidadeDeAeroportos; a++) {
 				Cidade cidadeAleatoria;
-				boolean cidadeJaEscolhida = false;
+				boolean cidadeJaEscolhida;
 				do {
+					cidadeJaEscolhida = false;
 					int numeroAleatorio = geradorDeNumerosAleatorios.nextInt(cidades.length);
 					cidadeAleatoria = cidades[numeroAleatorio];
 					for (int b = 0; b < a; b++) {
@@ -46,18 +47,21 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 	
 	@Override
 	public Mapa cruzar(Mapa outroMapa) {
-		System.out.println("cruzar()"); // TODO Teste, remover
-		Random geradorDeNumerosAleatorios = new Random();
-		int pontoDeCorte = geradorDeNumerosAleatorios.nextInt(quantidadeDeAeroportos);
-		Mapa filho = new Mapa(cidades, quantidadeDeAeroportos, false);
-		for (int a = 0; a < pontoDeCorte; a++) {
-			Cidade aeroporto = aeroportos[a];
-			filho.aeroportos[a] = aeroporto;
-		}
-		for (int a = pontoDeCorte; a < quantidadeDeAeroportos; a++) {
-			Cidade aeroporto = outroMapa.aeroportos[a];
-			filho.aeroportos[a] = aeroporto;
-		}
+//		System.out.println("cruzar()"); // TODO Teste, remover
+		Mapa filho;
+		do {
+			Random geradorDeNumerosAleatorios = new Random();
+			int pontoDeCorte = geradorDeNumerosAleatorios.nextInt(quantidadeDeAeroportos);
+			filho = new Mapa(cidades, quantidadeDeAeroportos, false);
+			for (int a = 0; a < pontoDeCorte; a++) {
+				Cidade aeroporto = aeroportos[a];
+				filho.aeroportos[a] = aeroporto;
+			}
+			for (int a = pontoDeCorte; a < quantidadeDeAeroportos; a++) {
+				Cidade aeroporto = outroMapa.aeroportos[a];
+				filho.aeroportos[a] = aeroporto;
+			}
+		} while (!filho.valido());
 		return filho;
 	}
 	
@@ -76,7 +80,7 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 	
 	@Override
 	public boolean equals(Object outroObjeto) {
-		System.out.println("equals()"); // TODO Teste, remover
+//		System.out.println("equals()"); // TODO Teste, remover
 		if (!(outroObjeto instanceof Mapa)) {
 			return false;
 		}
@@ -86,7 +90,7 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 
 	@Override
 	public int fitness() {
-		System.out.println("fitness()"); // TODO Teste, remover
+//		System.out.println("fitness()"); // TODO Teste, remover
 		if (fitness == null) {
 			int somaDasDistancias = 0;
 			for (Cidade cidade : cidades) {
@@ -99,7 +103,7 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 
 	@Override
 	public int fitnessDesejado() {
-		System.out.println("fitnessDesejado()"); // TODO Teste, remover
+//		System.out.println("fitnessDesejado()"); // TODO Teste, remover
 		return piorSomaDasDistanciasImaginavel;
 	}
 	
@@ -153,7 +157,7 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 
 	@Override
 	public void mutar() {
-		System.out.println("mutar()"); // TODO Teste, remover
+//		System.out.println("mutar()"); // TODO Teste, remover
 		Random geradorDeNumerosAleatorios = new Random();
 		boolean houveMudanca = false;
 		do {
@@ -163,7 +167,11 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 			Cidade cidadeAleatoria = cidades[numeroAleatorio]; 
 			if (cidadeAleatoria != aeroportoOriginal) {
 				aeroportos[posicaoAleatoria] = cidadeAleatoria;
-				houveMudanca = true;
+				if (valido()) {
+					houveMudanca = true;
+				} else {
+					aeroportos[posicaoAleatoria] = aeroportoOriginal;
+				}
 			}
 		} while (!houveMudanca);
 	}
@@ -177,7 +185,7 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 	
 	@Override
 	public String toString() {
-		System.out.println("toString()"); // TODO Teste, remover
+//		System.out.println("toString()"); // TODO Teste, remover
 		int maiorY = maiorY();
 		int menorY = menorY();
 		int menorX = menorX();
@@ -211,6 +219,21 @@ public class Mapa implements DefinicaoDoIndividuo<Mapa> {
 			mapaComoString.append("\n");
 		}
 		return mapaComoString.toString();
+	}
+	
+	private boolean valido() {
+		// Verifica se o mapa é válido (será inválido quando uma cidade for
+		// escolhida para ser aeroporto mais de uma vez)
+		boolean valido = true;
+		for (int a = 1; a < quantidadeDeAeroportos; a++) {
+			for (int b = 0; b < a; b++) {
+				if (aeroportos[a].equals(aeroportos[b])) {
+					valido = false;
+					break;
+				}
+			}
+		}
+		return valido;
 	}
 
 }
