@@ -6,6 +6,8 @@ public interface DefinicaoDoIndividuo<Individuo> {
 	
 	public int fitness();
 	
+	public int fitnessDesejado();
+	
 	public void mutar();
 
 }

@@ -2,8 +2,6 @@ package br.com.vinyanalista.ag;
 
 public abstract class AlgoritmoGenetico<Individuo extends DefinicaoDoIndividuo<Individuo>> {
 
-	protected abstract int fitnessDesejado();
-
 	private boolean deveMutar() {
 		return (Math.random() < probabilidadeDeMutacao());
 	}
@@ -15,10 +13,14 @@ public abstract class AlgoritmoGenetico<Individuo extends DefinicaoDoIndividuo<I
 		Populacao<Individuo> populacaoAtual = populacaoInicial;
 		Individuo solucao = null;
 		do {
+			populacaoAtual.calcularProbabilidades();
 			Populacao<Individuo> novaPopulacao = new Populacao<Individuo>();
 			for (int i = 0; i < populacaoAtual.tamanho(); i++) {
 				Individuo individuo1 = populacaoAtual.individuoAleatorio();
-				Individuo individuo2 = populacaoAtual.individuoAleatorio();
+				Individuo individuo2 = null;
+				do {
+					individuo2 = populacaoAtual.individuoAleatorio();
+				} while (individuo2.equals(individuo1));
 				Individuo filho = individuo1.cruzar(individuo2);
 				if (deveMutar()) {
 					filho.mutar();
@@ -28,7 +30,8 @@ public abstract class AlgoritmoGenetico<Individuo extends DefinicaoDoIndividuo<I
 			populacaoAtual = novaPopulacao;
 			melhorIndividuo = populacaoAtual.melhorIndividuo();
 			iteracoes++;
-			if ((melhorIndividuo.fitness() >= fitnessDesejado())
+			System.out.println("Fim da iteração " + iteracoes); // TODO Teste, remover
+			if ((melhorIndividuo.fitness() >= melhorIndividuo.fitnessDesejado())
 					|| (iteracoes == maximoDeIteracoes)) {
 				solucao = melhorIndividuo;
 			}

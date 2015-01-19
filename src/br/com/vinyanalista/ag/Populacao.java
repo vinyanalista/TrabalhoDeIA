@@ -5,19 +5,45 @@ import java.util.*;
 public class Populacao<Individuo extends DefinicaoDoIndividuo<Individuo>> {
 	
 	private final Random geradorDeNumerosAleatorios;
-	private List<Individuo> listaDeIndividuos;
+	private final List<Individuo> listaDeIndividuos;
+	private final HashMap<Individuo, Double> probabilidades;
 	
 	public Populacao() {
 		geradorDeNumerosAleatorios = new Random();
 		listaDeIndividuos = new ArrayList<Individuo>();
+		probabilidades = new HashMap<Individuo,Double>();
 	}
 	
 	public void adicionar(Individuo individuo) {
 		listaDeIndividuos.add(individuo);
 	}
 	
+	public void calcularProbabilidades() {
+		int fitnessTotal = 0;
+		for (Individuo individuo : listaDeIndividuos) {
+			fitnessTotal += individuo.fitness();
+		}
+		double probabilidadeAcumulada = 0;
+		for (Individuo individuo : listaDeIndividuos) {
+			double probabilidadeDoIndividuo = individuo.fitness() / (double) fitnessTotal;
+			probabilidadeAcumulada += probabilidadeDoIndividuo;
+			probabilidades.put(individuo, probabilidadeAcumulada); 
+		}
+	}
+	
 	public Individuo individuoAleatorio() {
-		return listaDeIndividuos.get(numeroAleatorio(1, tamanho()));
+		Individuo individuoEscolhido = null;
+		do {
+			double probabilidadeAleatoria = geradorDeNumerosAleatorios.nextDouble();
+			for (Individuo individuo : listaDeIndividuos) {
+				double probabilidadeDoIndividuo = probabilidades.get(individuo);
+				if (probabilidadeDoIndividuo >= probabilidadeAleatoria) {
+					individuoEscolhido = individuo;
+					break;
+				}
+			}
+		} while (individuoEscolhido == null);
+		return individuoEscolhido;
 	}
 	
 	public Individuo melhorIndividuo() {
@@ -29,13 +55,6 @@ public class Populacao<Individuo extends DefinicaoDoIndividuo<Individuo>> {
 			}
 		}
 		return melhor;
-	}
-	
-	private int numeroAleatorio(int menorValor, int maiorValor) {
-		// http://www.javapractices.com/topic/TopicAction.do?Id=62
-		long amplitude = (long) maiorValor - (long) menorValor + 1;
-		long fracao = (long)(amplitude * geradorDeNumerosAleatorios.nextDouble());
-		return (int)(fracao + menorValor);
 	}
 	
 	public int tamanho() {

@@ -4,11 +4,10 @@ import br.com.vinyanalista.ag.*;
 
 public class ProblemaDasRainhas extends AlgoritmoGenetico<Tabuleiro> {
 	
-	private static final int MAXIMO_DE_ITERACOES = 100;
-	private static final int TAMANHO_DA_POPULACAO_INICIAL = 10;
-	private static final int TAMANHO_DO_TABULEIRO = 8;
+	private static final int MAXIMO_DE_ITERACOES = 1000;
+	private static final int TAMANHO_DA_POPULACAO_INICIAL = 4;
+	private static final int TAMANHO_DO_TABULEIRO = 4;
 
-	private final int fitnessDesejado;
 	private final int maximoDeIteracoes;
 	private final Populacao<Tabuleiro> populacaoInicial;
 
@@ -25,18 +24,12 @@ public class ProblemaDasRainhas extends AlgoritmoGenetico<Tabuleiro> {
 	}
 	
 	public ProblemaDasRainhas(int tamanhoDoTabuleiro, int maximoDeIteracoes, int tamanhoDaPopulacaoInicial) {
-		fitnessDesejado = Tabuleiro.fitnessDesejado(tamanhoDoTabuleiro);
 		this.maximoDeIteracoes = maximoDeIteracoes;
 		populacaoInicial = new Populacao<Tabuleiro>();
 		for (int t = 0; t < tamanhoDaPopulacaoInicial; t++) {
 			Tabuleiro tabuleiro = new Tabuleiro(tamanhoDoTabuleiro);
 			populacaoInicial.adicionar(tabuleiro);
 		}
-	}
-
-	@Override
-	protected int fitnessDesejado() {
-		return fitnessDesejado;
 	}
 
 	@Override

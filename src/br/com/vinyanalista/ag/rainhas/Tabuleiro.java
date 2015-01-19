@@ -1,6 +1,6 @@
 package br.com.vinyanalista.ag.rainhas;
 
-import java.util.Random;
+import java.util.*;
 
 import br.com.vinyanalista.ag.DefinicaoDoIndividuo;
 
@@ -42,8 +42,29 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 
 	@Override
 	public Tabuleiro cruzar(Tabuleiro outroTabuleiro) {
-		// TODO Implementar cruzamento
-		return null;
+		Random geradorDeNumerosAleatorios = new Random();
+		int pontoDeCorte = geradorDeNumerosAleatorios.nextInt(tamanhoDoTabuleiro);
+		Tabuleiro filho = new Tabuleiro(tamanhoDoTabuleiro, false);
+		for (int coluna = 0; coluna < pontoDeCorte; coluna++) {
+			int linha = this.getLinhaDaRainha(coluna);
+			filho.setRainha(coluna, linha);
+		}
+		for (int coluna = pontoDeCorte; coluna < tamanhoDoTabuleiro; coluna++) {
+			int linha = outroTabuleiro.getLinhaDaRainha(coluna);
+			filho.setRainha(coluna, linha);
+		}
+		return filho;
+	}
+	
+	@Override
+	public boolean equals(Object outroObjeto) {
+		if (!(outroObjeto instanceof Tabuleiro)) {
+			return false;
+		}
+		Tabuleiro outroTabuleiro = (Tabuleiro) outroObjeto;
+		return (tamanhoDoTabuleiro == outroTabuleiro.tamanhoDoTabuleiro)
+				&& (posicoesDasRainhasNasColunas
+						.equals(outroTabuleiro.posicoesDasRainhasNasColunas));
 	}
 	
 	public static final int fatorial(int n) {
@@ -76,7 +97,8 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 		return fitness;
 	}
 	
-	public static final int fitnessDesejado(int tamanhoDoTabuleiro) {
+	@Override
+	public int fitnessDesejado() {
 		// Deseja-se que nenhuma das rainhas seja capaz de atacar uma a outra.
 		// Portanto, o valor desejado para a função fitness é a quantidade de
 		// pares de rainhas (28, para um tabuleiro 8x8).
@@ -108,6 +130,11 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 	
 	private void setRainha(int coluna, int linha) {
 		posicoesDasRainhasNasColunas[coluna] = linha;
+	}
+	
+	@Override
+	public String toString() {
+		return Arrays.toString(posicoesDasRainhasNasColunas);
 	}
 
 }
