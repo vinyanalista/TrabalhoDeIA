@@ -8,6 +8,7 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 	
 	private Integer fitness;
 	private final int[] posicoesDasRainhasNasColunas;
+	private final Integer quantidadeDeParesDeRainhas;
 	private final int tamanhoDoTabuleiro;
 	
 	public Tabuleiro(int tamanhoDoTabuleiro) {
@@ -24,6 +25,7 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 				setRainha(coluna, linhaAleatoria);
 			}
 		}
+		quantidadeDeParesDeRainhas = combinacao(tamanhoDoTabuleiro, 2); 
 		this.tamanhoDoTabuleiro = tamanhoDoTabuleiro;
 	}
 	
@@ -92,7 +94,7 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 						quantidadeDeParesDeRainhasQueSeAtacam++;
 				}
 			}
-			fitness = quantidadeDeParesDeRainhas(tamanhoDoTabuleiro) - quantidadeDeParesDeRainhasQueSeAtacam;
+			fitness = quantidadeDeParesDeRainhas - quantidadeDeParesDeRainhasQueSeAtacam;
 		}
 		return fitness;
 	}
@@ -101,8 +103,8 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 	public int fitnessDesejado() {
 		// Deseja-se que nenhuma das rainhas seja capaz de atacar uma a outra.
 		// Portanto, o valor desejado para a função fitness é a quantidade de
-		// pares de rainhas (28, para um tabuleiro 8x8).
-		return quantidadeDeParesDeRainhas(tamanhoDoTabuleiro);
+		// pares de rainhas (por exemplo, 28, para um tabuleiro 8x8).
+		return quantidadeDeParesDeRainhas;
 	}
 	
 	private int getLinhaDaRainha(int coluna) {
@@ -122,10 +124,6 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 				houveMudanca = true;
 			}
 		} while (!houveMudanca);
-	}
-	
-	public static final int quantidadeDeParesDeRainhas(int tamanhoDoTabuleiro) {
-		return combinacao(tamanhoDoTabuleiro, 2);
 	}
 	
 	private void setRainha(int coluna, int linha) {
