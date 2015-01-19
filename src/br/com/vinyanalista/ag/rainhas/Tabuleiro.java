@@ -132,7 +132,24 @@ public class Tabuleiro implements DefinicaoDoIndividuo<Tabuleiro> {
 	
 	@Override
 	public String toString() {
-		return Arrays.toString(posicoesDasRainhasNasColunas);
+		String[][] tabuleiroComoMatrizDeStrings = new String[tamanhoDoTabuleiro][tamanhoDoTabuleiro];
+		for (int coluna = 0; coluna < tamanhoDoTabuleiro; coluna++) {
+			for (int linha = 0; linha < tamanhoDoTabuleiro; linha++) {
+				tabuleiroComoMatrizDeStrings[linha][coluna] = "-";
+			}
+		}
+		for (int coluna = 0; coluna < tamanhoDoTabuleiro; coluna++) {
+			int linha = getLinhaDaRainha(coluna);
+			tabuleiroComoMatrizDeStrings[linha][coluna] = "X";
+		}
+		StringBuilder tabuleiroComoString = new StringBuilder();
+		for (int linha = 0; linha < tamanhoDoTabuleiro; linha++) {
+			for (int coluna = 0; coluna < tamanhoDoTabuleiro; coluna++) {
+				tabuleiroComoString.append(tabuleiroComoMatrizDeStrings[linha][coluna]);
+			}
+			tabuleiroComoString.append("\n");
+		}
+		return tabuleiroComoString.toString();
 	}
 
 }
